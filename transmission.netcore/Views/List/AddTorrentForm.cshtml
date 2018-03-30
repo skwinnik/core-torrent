@@ -1,0 +1,25 @@
+﻿@model AddTorrentViewModel
+@using (Html.BeginForm()) {
+    <div class="row">
+        <div class="col-md-6">
+            <label class="font-weight-bold">Magnet:</label>
+            @(Html.DevExpress().BootstrapTextBoxFor(m => m.Magnet))
+        </div>
+        <div class="col-md-6">
+            <label class="font-weight-bold">Path:</label>
+            @(Html.DevExpress().BootstrapTextBoxFor(m => m.Path))
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12 text-right">
+            @(Html.DevExpress().BootstrapButton("UpdateButton")
+            .Text("Add")
+            .ClientSideEvents(clientSideEvents => clientSideEvents.Click("list.onAddTorrentClick"))
+            .SettingsBootstrap(settings => settings.RenderOption(BootstrapRenderOption.Link)))
+            @(Html.DevExpress().BootstrapButton("CancelButton")
+            .Text("Cancel")
+            .ClientSideEvents(clientSideEvents => clientSideEvents.Click("list.onCancelAddTorrentClick"))
+            .SettingsBootstrap(settings => settings.RenderOption(BootstrapRenderOption.Link)))
+        </div>
+    </div>
+}

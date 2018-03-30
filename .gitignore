@@ -1,0 +1,7 @@
+/.vs/
+/transmission.netcore/bin/
+/transmission.netcore/bower_components/
+/transmission.netcore/obj/
+/transmission.netcore/transmission.netcore.csproj.user
+/transmission.netcore/wwwroot/lib/
+/transmission.netcore/ScaffoldingReadMe.txt

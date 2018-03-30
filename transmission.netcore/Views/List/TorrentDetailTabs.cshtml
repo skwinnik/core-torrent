@@ -1,0 +1,7 @@
+﻿@model TorrentViewModel
+
+@(Html.DevExpress().BootstrapPageControl("DetailsPageControl").TabPages(tabPages => {
+    tabPages.Add().Text("Stats").Content(@<text> @Html.Partial("TorrentStats", Model) </text>);
+    tabPages.Add().Text("Info").Content(@<text> @Html.Partial("TorrentDetailInfo", Model) </text>);
+    tabPages.Add().Text("Files").Content(@<text> @(await Component.InvokeAsync("TorrentFiles", new { torrentId = Model.ID })) </text>);
+}))

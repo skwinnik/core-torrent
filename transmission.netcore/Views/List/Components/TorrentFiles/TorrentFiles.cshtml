@@ -1,0 +1,16 @@
+@model IEnumerable<FileInfo>
+
+@(Html.DevExpress().BootstrapGridView<FileInfo>("TorrentFiles")
+    .KeyFieldName(m => m.Name)
+    .Columns(columns => {
+        columns.Add(m => m.Name);
+        columns.Add(m => m.SizeCompleted);
+        columns.Add(m => m.Size);
+        columns.Add(m => m.Priority);
+        columns.Add(m => m.Wanted);
+    })
+    .CssClasses(css => css.Row("small"))
+    .SettingsAdaptivity(settingsAdaptivity => settingsAdaptivity.AdaptivityMode(GridViewAdaptivityMode.HideDataCells))
+    .Routes(routes => routes.MapRoute(route => route.RouteType(GridViewRouteType.Default)
+        .RouteValues(new { Action = "TorrentFiles", Controller = "List", torrentId = ViewData["torrentId"] })))
+    .Bind(Model))

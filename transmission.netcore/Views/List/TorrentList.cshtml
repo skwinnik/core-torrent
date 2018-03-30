@@ -1,0 +1,55 @@
+﻿@model IEnumerable<TorrentViewModel>
+@(Html.DevExpress().BootstrapGridView<TorrentViewModel>("TorrentList")
+    .KeyFieldName(m => m.ID)
+    .Columns(columns => {
+        columns.AddCommandColumn().ShowClearFilterButton(true).ShowSelectCheckbox(true).ShowNewButtonInHeader(true);
+        columns.Add(m => m.Name);
+        columns.Add(m => m.PercentDone).DataItemTemplate(t => @<text>
+            @(Html.DevExpress().BootstrapProgressBar("PercentDone" + t.KeyValue)
+                                    .Minimum(0).Maximum(100)
+                                    .SettingsBootstrap(settings => settings.Animated(true).Striped(true))
+                                    .CssClasses(css => css.Control("")) // TODO conditional color
+                                    .Value(t.Eval<double>(m => m.PercentDone)))
+            </text>);
+        columns.Add(m => m.TotalSize);
+        columns.Add(m => m.RateDownload)
+            .Settings(settings => settings.AllowSort(false))
+            .DataItemTemplate(t => @<text> @Html.Partial("LiveCellTemplate", new LiveCellViewModel(t)) </text>);
+        columns.Add(m => m.RateUpload)
+            .Settings(settings => settings.AllowSort(false))
+            .DataItemTemplate(t => @<text> @Html.Partial("LiveCellTemplate", new LiveCellViewModel(t)) </text>);
+        columns.Add(m => m.ETA)
+            .Settings(settings => settings.AllowSort(false))
+            .DataItemTemplate(t => @<text> @Html.Partial("LiveCellTemplate", new LiveCellViewModel(t)) </text>);
+    })
+    .Templates(templates => templates
+        .DetailRow(t => @<text> @Html.Partial("TorrentDetailTabs", Model.First(i => i.ID == (int)t.KeyValue)) </text>)
+        .EditForm(t => @<text> @Html.Partial("AddTorrentForm", ViewBag.NewTorrent != null? (AddTorrentViewModel)ViewBag.NewTorrent : new AddTorrentViewModel()) </text>))
+    .SettingsDetail(settingsDetail => settingsDetail.ShowDetailRow(true).AllowOnlyOneMasterRowExpanded(true))
+    .SettingsPager(settingsPager => settingsPager.Mode(GridViewPagerMode.ShowPager))
+    .SettingsSearchPanel(searchPanel => searchPanel.Visible(false).ColumnNames("Name").CustomEditorID("searchTextBox"))
+    .SettingsAdaptivity(adaptivity => adaptivity
+        .AdaptivityMode(GridViewAdaptivityMode.HideDataCellsWindowLimit)
+        .HideDataCellsAtWindowInnerWidth(800)
+        .AdaptiveDetailColumnCount(3)
+        .AdaptiveDetailLayoutProperties(layout => {
+            layout.Items(items => {
+                items.Add(m => m.Name).ColSpanSm(8).ShowCaption(false);
+                items.Add(m => m.RateDownload).ColSpanSm(2).ShowCaption(false);
+                items.Add(m => m.RateUpload).ColSpanSm(2).ShowCaption(false);
+                items.Add(m => m.PercentDone).ColSpanSm(12).ShowCaption(false);
+            });
+        }))
+    .Toolbars(toolbars => toolbars.Add().Items(items => {
+        items.Add().Name("Start").IconCssClass("fas fa-play");
+        items.Add().Name("Stop").IconCssClass("").IconCssClass("fas fa-pause");
+    }))
+    .ClientSideEvents(clientSideEvents => clientSideEvents
+        .Init("list.onGridInit")
+        .BeginCallback("list.onGridBeginCallback")
+        .ToolbarItemClick("list.onToolbarItemClick"))
+    .Routes(routes => routes
+        .MapRoute(route => route.RouteType(GridViewRouteType.Default).RouteValues(new { Action = "TorrentList", Controller = "List" }))
+        .MapRoute(route => route.RouteType(GridViewRouteType.AddRow).RouteValues(new { Action = "AddTorrent", Controller = "List" })))
+    .EnableRowsCache(false)
+    .Bind(Model))

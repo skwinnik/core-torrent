@@ -1,0 +1,30 @@
+﻿@model TorrentViewModel
+
+<div class="form-row">
+    <div class="form-group col-12 col-xl-6">
+        <label class="font-weight-bold col-6 col-sm-6 col-md-3">Downloaded:</label>
+        <div class="col-9 col-sm-6 d-inline">
+            @Html.Partial("LiveCellTemplate", new LiveCellViewModel(Model.ID, "Downloaded", Model.Downloaded.String))
+        </div>
+    </div>
+    <div class="form-group col-12 col-xl-6">
+        <label class="font-weight-bold col-6 col-sm-6 col-md-3">Uploaded:</label>
+        <div class="col-9 col-sm-6 d-inline">
+            @Html.Partial("LiveCellTemplate", new LiveCellViewModel(Model.ID, "Uploaded", Model.Uploaded.String))
+        </div>
+    </div>
+</div>
+<div class="form-row">
+    <div class="form-group col-12 col-xl-6">
+        <label class="font-weight-bold col-6 col-sm-6 col-md-3">Location:</label>
+        <div class="col-9 col-sm-6 d-inline">
+           @Model.DownloadDir
+        </div>
+    </div>
+    <div class="form-group col-12 col-xl-6">
+        <label class="font-weight-bold col-6 col-sm-6 col-md-3">Hash:</label>
+        <div class="col-9 col-sm-6 d-inline">
+            @Model.Hash
+        </div>
+    </div>
+</div>

@@ -1,0 +1,38 @@
+@model IEnumerable<TorrentViewModel>
+@{
+    ViewData["Title"] = "List";
+}
+
+<script src="~/js/list.js"></script>
+<script src="~/js/charts.js"></script>
+
+@section NavbarMenu {
+    @(Html.DevExpress()
+                .BootstrapMenu()
+                .Name("filterMenu")
+                .Items(i => {
+                    i.Add()
+                       .Text("All").NavigateUrl(Url.Action("Index"));
+                    i.Add()
+                       .Text("Completed").NavigateUrl(Url.Action("Index", new { status="completed" }));
+                    i.Add()
+                        .Text("In Process").NavigateUrl(Url.Action("Index", new { status = "inprocess" }));
+                    i.Add()
+                        .Enabled(false)
+                        .Text("|");
+                    i.Add()
+                        .Text("Active").NavigateUrl(Url.Action("Index", new { status = "active" }));
+                    i.Add()
+                        .Text("Inactive").NavigateUrl(Url.Action("Index", new { status = "inactive" }));
+                })
+                .CssClasses(css => css.Control("mr-auto"))
+                .SettingsBootstrap(bootstrap => bootstrap.NavbarMode(true)))
+    @(Html.DevExpress().BootstrapButtonEdit("searchTextBox")
+        .NullText("Search")
+        .ClearButton(clearButton => clearButton.DisplayMode(ClearButtonDisplayMode.Always))
+        .Buttons(buttons=> buttons.Add().IconCssClass("fas fa-search").Position(ButtonsPosition.Left)))
+}
+
+@Html.Hidden("Status", Context.Request.Query["status"])
+
+@Html.Partial("TorrentList", Model)

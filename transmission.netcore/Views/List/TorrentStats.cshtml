@@ -1,0 +1,13 @@
+﻿@model TorrentViewModel
+
+@(Html.DevExpress().BootstrapChart("SpeedStats" + Model.ID)
+    .SeriesCollection(series => {
+        series.AddLineSeries().Name("Download Rate").ArgumentField("Time").ValueField("DownloadSpeed").Axis("Speed").Point(point => point.Visible(false));
+        series.AddLineSeries().Name("Upload Rate").ArgumentField("Time").ValueField("UploadSpeed").Axis("Speed").Point(point => point.Visible(false));
+    })
+    .ArgumentAxis(axis => axis.ArgumentType(typeof(DateTime)))
+    .ValueAxisCollection(valueAxisCollection => valueAxisCollection.Add().Name("Speed").ValueType(typeof(int)))
+    .SettingsAnimation(animation => animation.Enabled(false))
+    .Height(200)
+    .ClientSideEvents(clientSideEvents => clientSideEvents.Init("charts.onInit"))
+)
